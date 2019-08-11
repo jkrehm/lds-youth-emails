@@ -110,35 +110,44 @@
     return;
   }
 
-  const orgs = await fetchJson(endpoints.orgs());
-  const { subOrgId } = orgs.find(({ name }) => {
-    if (selectedOrgId === "M" && name === "Young Men") return true;
-    return selectedOrgId === "W" && name === "Young Women";
-  });
+  try {
+    const orgs = await fetchJson(endpoints.orgs());
+    const { subOrgId } = orgs.find(({ name }) => {
+      if (selectedOrgId === "M" && name === "Young Men") return true;
+      return selectedOrgId === "W" && name === "Young Women";
+    });
 
-  const youthOrg = await fetchJson(endpoints.subOrg(subOrgId));
-  const youth = await Promise.all(
-    youthOrg[0].children
-      .filter(({ firstOrgType }) =>
-        Object.entries(selectedOrg.classes).some(
-          ([key, value]) =>
-            selectedClasses.includes(key) && firstOrgType === value
+    const youthOrg = await fetchJson(endpoints.subOrg(subOrgId));
+    const youth = await Promise.all(
+      youthOrg[0].children
+        .filter(({ firstOrgType }) =>
+          Object.entries(selectedOrg.classes).some(
+            ([key, value]) =>
+              selectedClasses.includes(key) && firstOrgType === value
+          )
         )
-      )
-      .reduce(
-        (acc, { members }) =>
-          acc.concat(
-            members.map(async ({ email, householdEmail, id, name }) => {
-              return {
-                name,
-                email,
-                householdEmail: householdEmail || (await getHouseholdEmail(id))
-              };
-            })
-          ),
-        []
-      )
-  );
+        .reduce(
+          (acc, { members }) =>
+            acc.concat(
+              members.map(async ({ email, householdEmail, id, name }) => {
+                return {
+                  name,
+                  email,
+                  householdEmail:
+                    householdEmail || (await getHouseholdEmail(id))
+                };
+              })
+            ),
+          []
+        )
+    );
 
-  downloadData(jsonToCSV(youth), `y${selectedOrgId.toLowerCase()}.csv`);
+    downloadData(jsonToCSV(youth), `y${selectedOrgId.toLowerCase()}.csv`);
+  } catch (e) {
+    console.error(e);
+
+    alert(
+      "Something went wrong. Please check the browser console for more details."
+    );
+  }
 })();
