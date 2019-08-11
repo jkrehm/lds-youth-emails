@@ -11,9 +11,9 @@
     M: {
       descr: "(P)riest, (T)eacher, (D)eacon",
       classes: {
-        D: "DEACON",
-        P: "PRIEST",
-        T: "TEACHER"
+        D: "DEACONS_QUORUM",
+        P: "PRIESTS_QUORUM",
+        T: "TEACHERS_QUORUM"
       }
     },
     W: {
