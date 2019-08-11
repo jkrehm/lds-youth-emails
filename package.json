@@ -1,0 +1,14 @@
+{
+  "name": "youth-emails",
+  "version": "1.0.0",
+  "description": "Script to get emails for youth and their head-of-household",
+  "main": "index.js",
+  "repository": "https://github.com/jkrehm/lds-youth-emails",
+  "author": "Jonathan Rehm <jonathan@rehm.me>",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "prettier": "^1.18.2"
+  }
+}
